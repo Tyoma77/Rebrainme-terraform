@@ -13,10 +13,10 @@ resource "digitalocean_ssh_key" "my_key" {
 }
 
 resource "digitalocean_droplet" "first_drop" {
-  image = "ubuntu-18-04-x64"
-  name = "first-machne"
-  region = "LON1"
-  size = "s-1vcpu-1gb"
+  image = var.do_server_image
+  name = var.do_server_name
+  region = var.do_server_region
+  size = var.do_server_size
   ssh_keys = [ data.digitalocean_ssh_key.rebrain_key.id, digitalocean_ssh_key.my_key.fingerprint ]
-  tags = [ "devops", "toma77_at_ya_ru" ]
+  tags = [ var.do_module_tag, var.do_email_tag ]
 }
