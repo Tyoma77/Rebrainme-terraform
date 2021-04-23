@@ -50,3 +50,46 @@ variable "do_email_tag" {
     default = "tyoma77_at_ya_ru"
     type = string
 }
+
+variable "aws_access_key" {
+    description = "AWS access key"
+    type = string
+}
+
+variable "aws_secret_key" {
+    description = "AWS secret key"
+    type = string
+}
+
+variable "aws_region" {
+    description = "AWS region"
+    default = "eu-west-2"
+    type = string
+}
+
+variable "aws_route53_record_name" {
+    description = "AWS route53 record name"
+    default = "artem-vingradov.devops.rebrain.srwx.net"
+    type = string
+}
+
+variable "aws_route53_record_type" {
+    description = "AWS route53 record type"
+    default = "NS"
+    type = string
+}
+
+variable "aws_route53_record_ttl" {
+    description = "AWS route53 record ttl"
+    default = 300
+    type = number
+}
+variable "aws_route53_zone_name" {
+    description = "AWS route53 zone name"
+    default = "devops.rebrain.srwx.net"
+    type = string
+}
+
+locals {
+    do_ip_adress = data.digitalocean_droplet.do_server.ipv4_address
+}
