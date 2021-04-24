@@ -69,7 +69,7 @@ variable "aws_region" {
 
 variable "aws_route53_record_name" {
     description = "AWS route53 record name"
-    default = "artem-vingradov.devops.rebrain.srwx.net"
+    default = "artem-vingradov"
     type = string
 }
 
@@ -90,6 +90,13 @@ variable "aws_route53_zone_name" {
     type = string
 }
 
-locals {
-    do_ip_adress = data.digitalocean_droplet.do_server.ipv4_address
+# locals {
+#    count = var.number_do_vps
+#    do_ip_adress = [data.digitalocean_droplet.do_server[count.index].ipv4_address]
+# }
+
+variable "number_do_vps" {
+    description = "The number of created VPS in DO"
+    default = 1
+    type = number
 }

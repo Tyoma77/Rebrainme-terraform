@@ -18,7 +18,8 @@ resource "digitalocean_ssh_key" "my_key" {
   public_key = file(var.pub_key_path)
 }
 
-resource "digitalocean_droplet" "first_drop" {
+resource "digitalocean_droplet" "do_vps" {
+  count = var.number_do_vps
   image = var.do_server_image
   name = var.do_server_name
   region = var.do_server_region
@@ -28,7 +29,8 @@ resource "digitalocean_droplet" "first_drop" {
 }
 
 data "digitalocean_droplet" "do_server" {
-  name = digitalocean_droplet.first_drop.name
+  count = var.number_do_vps
+  name = digitalocean_droplet.do_vps[count.index].name
 } 
 
 data "aws_route53_zone" "selected" {
@@ -36,9 +38,10 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_route53_record" "www" {
+  count = var.number_do_vps
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = var.aws_route53_record_name
+  name    = "artem-${count.index+1}.${var.aws_route53_zone_name}"
   type    = var.aws_route53_record_type
   ttl     = var.aws_route53_record_ttl
-  records = [local.do_ip_adress]
+  records = [element(data.digitalocean_droplet.do_server.*.ipv4_address, count.index)]
 }
