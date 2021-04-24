@@ -40,7 +40,7 @@ data "aws_route53_zone" "selected" {
 resource "aws_route53_record" "www" {
   count = var.number_do_vps
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "artem-${count.index+1}.${var.aws_route53_zone_name}"
+  name    = "${var.aws_route53_record_prefix}-${count.index+1}.${var.aws_route53_zone_name}"
   type    = var.aws_route53_record_type
   ttl     = var.aws_route53_record_ttl
   records = [element(data.digitalocean_droplet.do_server.*.ipv4_address, count.index)]
