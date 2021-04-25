@@ -99,3 +99,26 @@ variable "number_do_vps" {
     default = 1
     type = number
 }
+
+variable "do_vps_passwd" {
+    description = "DO vps root password"
+    type = string
+}
+
+variable "do_vps_user" {
+    description = "DO vps default user"
+    default = "root"
+    type = string
+}
+
+variable "prov_con_type" {
+    description = "Provisioner connection type"
+    default = "ssh"
+    type = string
+}
+
+variable "prv_key_path" {
+    description = "Path to my pivate key"
+    default = "D:/terraform_digitalocean/key/id_rsa"
+    type = string
+}

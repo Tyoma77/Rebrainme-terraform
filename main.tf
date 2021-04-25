@@ -26,6 +26,19 @@ resource "digitalocean_droplet" "do_vps" {
   size = var.do_server_size
   ssh_keys = [ data.digitalocean_ssh_key.rebrain_key.id, digitalocean_ssh_key.my_key.fingerprint ]
   tags = [ var.do_module_tag, var.do_email_tag ]
+
+  provisioner "remote-exec" {
+    connection {
+      host = self.ipv4_address
+      type = var.prov_con_type
+      user = var.do_vps_user
+      private_key = "${file(var.prv_key_path)}"
+    }
+
+    inline = [
+      "echo '${var.do_vps_user}:${var.do_vps_passwd}' | sudo  chpasswd",
+    ]
+  }
 }
 
 data "digitalocean_droplet" "do_server" {
