@@ -18,6 +18,12 @@ resource "digitalocean_ssh_key" "my_key" {
   public_key = file(var.pub_key_path)
 }
 
+resource "random_string" "vps_password" {
+  count = var.number_do_vps
+  length = 16
+  special = false
+}
+
 resource "digitalocean_droplet" "do_vps" {
   count = var.number_do_vps
   image = var.do_server_image
@@ -36,7 +42,7 @@ resource "digitalocean_droplet" "do_vps" {
     }
 
     inline = [
-      "echo '${var.do_vps_user}:${var.do_vps_passwd}' | sudo  chpasswd",
+      "echo '${var.do_vps_user}:${element(random_string.vps_password.*.result, count.index)}' | sudo  chpasswd",
     ]
   }
 }
