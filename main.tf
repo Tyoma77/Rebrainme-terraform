@@ -65,11 +65,8 @@ resource "aws_route53_record" "www" {
   records = [element(data.digitalocean_droplet.do_server.*.ipv4_address, count.index)]
 }
 
-# change file name to veriable
 resource "local_file" "list_of_vps" {
-  # count = "${length(var.devs)}"
   content = "${templatefile("${path.module}/vps.tpl", {
-    #abc = [ "${count.index + 1} : ${aws_route53_record.www[count.index].name} ${data.digitalocean_droplet.do_server[count.index].ipv4_address}  ${random_string.vps_password[count.index].result}",]
     ip_adr = local.do_ip_adress
     pwd = local.do_passwd
     dns = local.vps_dns

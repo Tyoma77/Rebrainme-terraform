@@ -21,12 +21,6 @@ variable "do_server_image" {
     type = string
 }
 
-# variable "do_server_name" {
-#    description = "Name of the DO server"
-#    default = "first-machine"
-#    type = string
-#}
-
 variable "do_server_region" {
     description = "Region of DO server"
     default = "LON1"
@@ -95,12 +89,6 @@ locals {
    do_passwd = random_string.vps_password.*.result
    vps_dns = aws_route53_record.www.*.name
 }
-
-# variable "number_do_vps" {
-#    description = "The number of created VPS in DO"
-#    default = 1
-#    type = number
-#}
 
 variable "do_vps_passwd" {
     description = "DO vps root password"
