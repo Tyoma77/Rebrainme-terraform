@@ -1,0 +1,11 @@
+terraform.tfvars
+terraform.tfstate.backup
+terraform.tfstate
+terraform.pub
+.terraform.lock.hcl
+.terraform/providers/registry.terraform.io/digitalocean/digitalocean/2.8.0/windows_amd64/CHANGELOG.md
+.terraform/providers/registry.terraform.io/digitalocean/digitalocean/2.8.0/windows_amd64/LICENSE
+.terraform/providers/registry.terraform.io/digitalocean/digitalocean/2.8.0/windows_amd64/README.md
+.terraform/providers/registry.terraform.io/digitalocean/digitalocean/2.8.0/windows_amd64/terraform-provider-digitalocean_v2.8.0.exe
+key/id_rsa
+.terraform/providers/registry.terraform.io/hashicorp/aws/3.37.0/windows_amd64/terraform-provider-aws_v3.37.0_x5.exe
