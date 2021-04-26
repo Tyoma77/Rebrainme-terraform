@@ -19,15 +19,15 @@ resource "digitalocean_ssh_key" "my_key" {
 }
 
 resource "random_string" "vps_password" {
-  count = var.number_do_vps
+  count = length(var.devs)
   length = 16
   special = false
 }
 
 resource "digitalocean_droplet" "do_vps" {
-  count = var.number_do_vps
+  count = length(var.devs)
   image = var.do_server_image
-  name = var.do_server_name
+  name = "${element(var.devs, count.index)}"
   region = var.do_server_region
   size = var.do_server_size
   ssh_keys = [ data.digitalocean_ssh_key.rebrain_key.id, digitalocean_ssh_key.my_key.fingerprint ]
@@ -48,7 +48,7 @@ resource "digitalocean_droplet" "do_vps" {
 }
 
 data "digitalocean_droplet" "do_server" {
-  count = var.number_do_vps
+  count = length(var.devs)
   name = digitalocean_droplet.do_vps[count.index].name
 } 
 
@@ -57,10 +57,24 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_route53_record" "www" {
-  count = var.number_do_vps
+  count = length(var.devs)
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "${var.aws_route53_record_prefix}-${count.index+1}.${var.aws_route53_zone_name}"
+  name    = "${var.aws_route53_record_prefix}-${element(split("-", element(var.devs, count.index)), 0)}.${var.aws_route53_zone_name}"
   type    = var.aws_route53_record_type
   ttl     = var.aws_route53_record_ttl
   records = [element(data.digitalocean_droplet.do_server.*.ipv4_address, count.index)]
 }
+
+# change file name to veriable
+resource "local_file" "list_of_vps" {
+  # count = "${length(var.devs)}"
+  content = "${templatefile("${path.module}/vps.tpl", {
+    #abc = [ "${count.index + 1} : ${aws_route53_record.www[count.index].name} ${data.digitalocean_droplet.do_server[count.index].ipv4_address}  ${random_string.vps_password[count.index].result}",]
+    ip_adr = local.do_ip_adress
+    pwd = local.do_passwd
+    dns = local.vps_dns
+    }
+  )}"
+  filename = "${path.module}/vps.txt"
+}
+

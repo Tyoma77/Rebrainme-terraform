@@ -21,11 +21,11 @@ variable "do_server_image" {
     type = string
 }
 
-variable "do_server_name" {
-    description = "Name of the DO server"
-    default = "first-machine"
-    type = string
-}
+# variable "do_server_name" {
+#    description = "Name of the DO server"
+#    default = "first-machine"
+#    type = string
+#}
 
 variable "do_server_region" {
     description = "Region of DO server"
@@ -90,15 +90,17 @@ variable "aws_route53_zone_name" {
     type = string
 }
 
-# locals {
-#   do_ip_adress = [data.digitalocean_droplet.do_server.ipv4_address]
-# }
-
-variable "number_do_vps" {
-    description = "The number of created VPS in DO"
-    default = 1
-    type = number
+locals {
+   do_ip_adress = data.digitalocean_droplet.do_server.*.ipv4_address
+   do_passwd = random_string.vps_password.*.result
+   vps_dns = aws_route53_record.www.*.name
 }
+
+# variable "number_do_vps" {
+#    description = "The number of created VPS in DO"
+#    default = 1
+#    type = number
+#}
 
 variable "do_vps_passwd" {
     description = "DO vps root password"
@@ -121,4 +123,10 @@ variable "prv_key_path" {
     description = "Path to my pivate key"
     default = "D:/terraform_digitalocean/key/id_rsa"
     type = string
+}
+
+variable "devs" {
+    description = "List of the virtual machines"
+    type = list
+    default = ["lb-username", "app1-username", "app2-username"]
 }
